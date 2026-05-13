@@ -17,7 +17,8 @@
             "group": "Getting Started",
             "pages": [
               "introduction",
-              "quickstart"
+              "quickstart",
+              "payx-js"
             ]
           },
           {
@@ -50,7 +51,8 @@
   },
   "logo": {
     "light": "/logo/light.png",
-    "dark": "/logo/dark.png"
+    "dark": "/logo/dark.png",
+    "height": 32
   },
   "navbar": {
     "links": [
