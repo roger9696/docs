@@ -1,0 +1,83 @@
+---
+title: "Create Charge"
+api: "POST https://api.payx.app/v1/charge"
+description: "Initiate a Mobile Money collection"
+---
+
+### Body Parameters
+
+<ParamField body="amount" type="number" required>
+  The amount to collect in GHS.
+</ParamField>
+
+<ParamField body="phoneNumber" type="string" required>
+  The customer's 10-digit mobile money number (e.g., `0551234987`).
+</ParamField>
+
+<ParamField body="network" type="string" required>
+  The network provider. Options: `MTN`, `TELECEL`, `AIRTELTIGO`.
+</ParamField>
+
+<ParamField body="currency" type="string" default="GHS">
+  The currency code. Currently only `GHS` is supported.
+</ParamField>
+
+<ParamField body="payerMessage" type="string">
+  A message displayed to the customer on their phone.
+</ParamField>
+
+<ParamField body="payeeNote" type="string">
+  A private note for your records.
+</ParamField>
+
+### Response
+
+<ResponseField name="message" type="string">
+  A summary of the initiation status.
+</ResponseField>
+
+<ResponseField name="transactionId" type="string">
+  The unique ID for this transaction. Use this for status checks.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  The current status. Usually `PENDING`.
+</ResponseField>
+
+<RequestExample>
+
+```bash curl
+curl -X POST https://api.payx.app/v1/charge \
+  -H "x-api-key: sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 1.0,
+    "phoneNumber": "0551234987",
+    "network": "MTN"
+  }'
+```
+
+```javascript Node.js
+const { PayX } = require('payx-node');
+const payx = new PayX({ apiKey: 'sk_test_...' });
+
+const res = await payx.charge.create({
+  amount: 1.0,
+  phoneNumber: '0551234987',
+  network: 'MTN'
+});
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 202 Accepted
+{
+  "message": "Transaction initiated",
+  "transactionId": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "PENDING"
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,92 @@
+---
+title: "PayX JS (Inline Checkout)"
+description: "Accept payments using the PayX popup modal"
+---
+
+The `payx-js` SDK allows you to accept payments directly on your website without redirecting your customers. It opens a secure, high-conversion checkout modal as an overlay.
+
+## Installation
+
+### Via NPM
+```bash
+npm install payx-js
+```
+
+### Via CDN
+For simple HTML sites, you can include the script via our CDN:
+```html
+<script src="https://cdn.payx.app/js/v1/payx.js"></script>
+```
+
+## Basic Usage
+
+To start a payment, initialize the `PayX` object and call the `setup` method.
+
+```javascript
+import { PayX } from 'payx-js';
+
+const payment = PayX.setup({
+  key: 'pk_test_your_public_key',
+  email: 'customer@example.com',
+  amount: 100.00,
+  currency: 'GHS',
+  onSuccess: (response) => {
+    console.log('Payment successful!', response.transactionId);
+    alert('Thank you for your payment!');
+  },
+  onCancel: () => {
+    console.log('Customer closed the modal');
+  }
+});
+
+// Open the checkout modal
+payment.open();
+```
+
+## Configuration Options
+
+<ParamField body="key" type="string" required>
+  Your PayX **Public Key** (starts with `pk_`).
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  The customer's email address.
+</ParamField>
+
+<ParamField body="amount" type="number" required>
+  The amount to charge in GHS.
+</ParamField>
+
+<ParamField body="currency" type="string" default="GHS">
+  The currency code. Currently only `GHS` is supported.
+</ParamField>
+
+<ParamField body="firstname" type="string">
+  Customer's first name.
+</ParamField>
+
+<ParamField body="lastname" type="string">
+  Customer's last name.
+</ParamField>
+
+<ParamField body="phoneNumber" type="string">
+  Customer's mobile money number.
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  A JSON object containing custom data you want to associate with the transaction.
+</ParamField>
+
+## Callbacks
+
+<ParamField body="onSuccess" type="function">
+  Called when the payment is completed successfully. Returns a response object with the `transactionId`.
+</ParamField>
+
+<ParamField body="onCancel" type="function">
+  Called if the customer closes the modal without completing the payment.
+</ParamField>
+
+<ParamField body="onError" type="function">
+  Called if an error occurs during the checkout process.
+</ParamField>

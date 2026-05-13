@@ -1,0 +1,62 @@
+{
+  "name": "PayX",
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#10B981",
+    "light": "#34D399",
+    "dark": "#059669"
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:support@payx.app"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get API Keys",
+    "url": "https://payx.app/dashboard"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "payx-js"
+      ]
+    },
+    {
+      "group": "Authentication",
+      "pages": [
+        "authentication"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/charge",
+        "api-reference/payout"
+      ]
+    },
+    {
+      "group": "Webhooks",
+      "pages": [
+        "webhooks"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "x": "https://x.com/payx",
+    "github": "https://github.com/payx-app"
+  }
+}

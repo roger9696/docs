@@ -1,0 +1,68 @@
+---
+title: Webhooks
+description: Receive real-time notifications about your transactions
+---
+
+Webhooks allow you to receive real-time notifications when the status of a transaction changes (e.g., when a user approves a payment prompt).
+
+## Configuring Webhooks
+
+You can configure your Webhook URL in the [PayX Dashboard](https://payx.app/dashboard) under **Developer Settings**.
+
+Once configured, PayX will send a `POST` request to your URL whenever a transaction is completed or failed.
+
+## Payload Structure
+
+The webhook payload is a JSON object containing the transaction details.
+
+```json
+{
+  "event": "transaction.success",
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "amount": 10.0,
+    "currency": "GHS",
+    "status": "SUCCESSFUL",
+    "reference": "your_custom_reference",
+    "customer": {
+      "phone": "0551234987",
+      "network": "MTN"
+    }
+  }
+}
+```
+
+## Security
+
+To ensure that a webhook was actually sent by PayX, you should verify the signature. 
+
+PayX includes an `x-payx-signature` header in every request. This is a HMAC-SHA256 hash of the request body, signed with your **Webhook Secret**.
+
+### Verifying Signatures (Node.js SDK)
+
+If you are using the `payx-node` SDK, verifying signatures is straightforward:
+
+```javascript
+const { PayX } = require('payx-node');
+const payx = new PayX({ apiKey: '...' });
+
+// Express.js Example
+app.post('/webhooks', (req, res) => {
+  const signature = req.headers['x-payx-signature'];
+  const secret = 'your_webhook_secret_from_dashboard';
+  
+  const isValid = payx.webhooks.verifySignature(
+    JSON.stringify(req.body), 
+    signature, 
+    secret
+  );
+
+  if (!isValid) {
+    return res.status(401).send('Invalid Signature');
+  }
+
+  // Process the event...
+  console.log('Event received:', req.body.event);
+  res.status(200).send('OK');
+});
+```

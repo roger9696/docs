@@ -1,0 +1,36 @@
+---
+title: Authentication
+description: Secure your requests to the PayX API
+---
+
+PayX uses API Keys to authenticate requests. You can view and manage your API keys in the [PayX Dashboard](https://payx.app/dashboard).
+
+## API Keys
+
+Every account has two sets of keys:
+
+1.  **Test Keys:** Use these for development and testing. No real money will be moved.
+2.  **Live Keys:** Use these for production. Real money will be moved.
+
+| Key Type | Header Name | Example |
+| :--- | :--- | :--- |
+| **Secret Key** | `x-api-key` | `sk_test_...` or `sk_live_...` |
+
+## Authenticating Requests
+
+All API requests must be made over HTTPS. To authenticate, include your Secret Key in the `x-api-key` header of your request.
+
+```bash
+curl -X POST https://api.payx.app/v1/charge \
+  -H "x-api-key: your_secret_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 10.0,
+    "phoneNumber": "0551234987",
+    "network": "MTN"
+  }'
+```
+
+<Warning>
+  **Keep your Secret Keys private.** Do not share them in client-side code (browsers, mobile apps) or public repositories like GitHub.
+</Warning>

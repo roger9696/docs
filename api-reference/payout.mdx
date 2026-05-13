@@ -1,0 +1,81 @@
+---
+title: "Create Payout"
+api: "POST https://api.payx.app/v1/payout"
+description: "Send money to a mobile wallet"
+---
+
+### Body Parameters
+
+<ParamField body="amount" type="number" required>
+  The amount to send in GHS.
+</ParamField>
+
+<ParamField body="phoneNumber" type="string" required>
+  The recipient's 10-digit mobile money number.
+</ParamField>
+
+<ParamField body="network" type="string" required>
+  The network provider. Options: `MTN`, `TELECEL`, `AIRTELTIGO`.
+</ParamField>
+
+<ParamField body="currency" type="string" default="GHS">
+  The currency code. Currently only `GHS` is supported.
+</ParamField>
+
+<ParamField body="payeeNote" type="string">
+  A note that will appear in the recipient's transaction history.
+</ParamField>
+
+### Response
+
+<ResponseField name="message" type="string">
+  A summary of the initiation status.
+</ResponseField>
+
+<ResponseField name="transactionId" type="string">
+  The unique ID for this transaction.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  The current status.
+</ResponseField>
+
+<RequestExample>
+
+```bash curl
+curl -X POST https://api.payx.app/v1/payout \
+  -H "x-api-key: sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 50.0,
+    "phoneNumber": "0551234987",
+    "network": "MTN",
+    "payeeNote": "Supplier Payment"
+  }'
+```
+
+```javascript Node.js
+const { PayX } = require('payx-node');
+const payx = new PayX({ apiKey: 'sk_test_...' });
+
+const res = await payx.payout.create({
+  amount: 50.0,
+  phoneNumber: '0551234987',
+  network: 'MTN',
+  payeeNote: 'Supplier Payment'
+});
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 202 Accepted
+{
+  "message": "Payout initiated",
+  "transactionId": "tx_987654321",
+  "status": "PENDING"
+}
+```
+
+</ResponseExample>
