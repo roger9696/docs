@@ -10,16 +10,6 @@
     "light": "#34D399",
     "dark": "#059669"
   },
-  "topbarLinks": [
-    {
-      "name": "Support",
-      "url": "mailto:support@payx.app"
-    }
-  ],
-  "topbarCtaButton": {
-    "name": "Get API Keys",
-    "url": "https://payx.app/dashboard"
-  },
   "tabs": [
     {
       "name": "API Reference",

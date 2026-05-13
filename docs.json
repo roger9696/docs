@@ -54,19 +54,6 @@
     "dark": "/logo/dark.png",
     "height": 32
   },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:support@payx.app"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Get API Keys",
-      "href": "https://payx.app/dashboard"
-    }
-  },
   "footer": {
     "socials": {
       "x": "https://x.com/payx",
