@@ -15,23 +15,15 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": [
-              "introduction",
-              "quickstart",
-              "payx-js"
-            ]
+            "pages": ["introduction", "quickstart", "payx-js"]
           },
           {
             "group": "Authentication",
-            "pages": [
-              "authentication"
-            ]
+            "pages": ["authentication"]
           },
           {
             "group": "Webhooks",
-            "pages": [
-              "webhooks"
-            ]
+            "pages": ["webhooks"]
           }
         ]
       },
@@ -40,10 +32,7 @@
         "groups": [
           {
             "group": "API Reference",
-            "pages": [
-              "api-reference/charge",
-              "api-reference/payout"
-            ]
+            "pages": ["api-reference/charge", "api-reference/payout"]
           }
         ]
       }
@@ -51,8 +40,15 @@
   },
   "logo": {
     "light": "/logo/light.png",
-    "dark": "/logo/dark.png",
-    "height": 48
+    "dark": "/logo/dark.png"
+  },
+  "navbar": {
+    "links": [],
+    "primary": {
+      "type": "button",
+      "label": "Get API Keys",
+      "href": "https://pay-x-beryl.vercel.app/dashboard"
+    }
   },
   "footer": {
     "socials": {
