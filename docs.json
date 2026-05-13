@@ -52,7 +52,7 @@
   "logo": {
     "light": "/logo/light.png",
     "dark": "/logo/dark.png",
-    "height": 32
+    "height": 48
   },
   "footer": {
     "socials": {

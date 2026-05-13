@@ -2,7 +2,8 @@
   "name": "PayX",
   "logo": {
     "light": "/logo/light.png",
-    "dark": "/logo/dark.png"
+    "dark": "/logo/dark.png",
+    "height": 48
   },
   "favicon": "/favicon.png",
   "colors": {
