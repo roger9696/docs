@@ -26,6 +26,18 @@ description: "Send money to a mobile wallet"
   A note that will appear in the recipient's transaction history.
 </ParamField>
 
+<ParamField body="payerMessage" type="string">
+  A note for the merchant's internal records.
+</ParamField>
+
+<ParamField body="email" type="string">
+  Optional email address of the recipient.
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Custom JSON data to associate with the payout.
+</ParamField>
+
 ### Response
 
 <ResponseField name="message" type="string">

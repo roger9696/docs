@@ -2,8 +2,7 @@
   "name": "PayX",
   "logo": {
     "light": "/logo/light.png",
-    "dark": "/logo/dark.png",
-    "height": 48
+    "dark": "/logo/dark.png"
   },
   "favicon": "/favicon.png",
   "colors": {
@@ -25,7 +24,7 @@
   "navigation": [
     {
       "group": "Getting Started",
-      "pages": ["introduction", "quickstart", "payx-js"]
+      "pages": ["introduction", "quickstart", "payx-node", "payx-js"]
     },
     {
       "group": "Authentication",

@@ -1,0 +1,73 @@
+---
+title: "PayX Node SDK"
+description: "Server-side integration for Node.js"
+---
+
+The `payx-node` SDK provides a robust set of tools for interacting with the PayX API from your server-side applications. It handles authentication, response parsing, and error management automatically.
+
+## Installation
+
+Install the package via NPM:
+
+```bash
+npm install payx-node@latest
+```
+
+## Initialization
+
+Initialize the client with your **Secret Key** retrieved from the [PayX Dashboard](https://pay-x-beryl.vercel.app/dashboard).
+
+```javascript
+const { PayX } = require('payx-node');
+
+const payx = new PayX({
+  apiKey: 'sk_test_your_secret_key'
+});
+```
+
+## Collections (Requesting Payment)
+
+To request money from a customer (Mobile Money Charge), use the `charge.create` method.
+
+```javascript
+const charge = await payx.charge.create({
+  amount: 50.0,
+  currency: 'GHS',
+  phoneNumber: '0551234567',
+  network: 'MTN',
+  payerMessage: 'Order #1234'
+});
+
+console.log('Transaction ID:', charge.transactionId);
+```
+
+## Payouts (Disbursements)
+
+You can send money to any mobile money wallet using the `payout.create` method.
+
+```javascript
+const payout = await payx.payout.create({
+  amount: 25.0,
+  phoneNumber: '0241112223',
+  network: 'MTN',
+  payeeNote: 'Vendor Payment'
+});
+
+console.log('Payout initiated:', payout.transactionId);
+```
+
+## Webhook Verification
+
+Verify that incoming webhooks are actually from PayX using our helper method.
+
+```javascript
+const isValid = payx.webhooks.verify(
+  payload, 
+  signature, 
+  webhookSecret
+);
+
+if (isValid) {
+  // Process the event
+}
+```
