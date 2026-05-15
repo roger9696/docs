@@ -1,6 +1,6 @@
 ---
 title: "Create Charge"
-api: "POST https://api.payx.app/v1/charge"
+api: "POST /charge"
 description: "Initiate a Mobile Money collection"
 ---
 
@@ -47,7 +47,7 @@ description: "Initiate a Mobile Money collection"
 <RequestExample>
 
 ```bash curl
-curl -X POST https://api.payx.app/v1/charge \
+curl -X POST https://pay-x-beryl.vercel.app/api/v1/charge \
   -H "x-api-key: sk_test_..." \
   -H "Content-Type: application/json" \
   -d '{

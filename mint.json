@@ -10,6 +10,9 @@
     "light": "#34D399",
     "dark": "#059669"
   },
+  "api": {
+    "baseUrl": "https://pay-x-beryl.vercel.app/api/v1"
+  },
   "topbarLinks": [],
   "topbarCtaButton": {
     "name": "Get API Keys",

@@ -1,6 +1,6 @@
 ---
 title: "Create Payout"
-api: "POST https://api.payx.app/v1/payout"
+api: "POST /payout"
 description: "Send money to a mobile wallet"
 ---
 
@@ -55,7 +55,7 @@ description: "Send money to a mobile wallet"
 <RequestExample>
 
 ```bash curl
-curl -X POST https://api.payx.app/v1/payout \
+curl -X POST https://pay-x-beryl.vercel.app/api/v1/payout \
   -H "x-api-key: sk_test_..." \
   -H "Content-Type: application/json" \
   -d '{
