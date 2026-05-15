@@ -11,7 +11,7 @@
     "dark": "#059669"
   },
   "api": {
-    "baseUrl": "https://pay-x-beryl.vercel.app/api/v1",
+    "baseUrl": "https://payx.company/api/v1",
     "auth": {
       "method": "key",
       "name": "x-api-key"
@@ -20,7 +20,7 @@
   "topbarLinks": [],
   "topbarCtaButton": {
     "name": "Get API Keys",
-    "url": "https://pay-x-beryl.vercel.app/dashboard"
+    "url": "https://payx.company/dashboard"
   },
   "tabs": [
     {
