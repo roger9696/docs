@@ -8,6 +8,15 @@
     "dark": "#059669"
   },
   "favicon": "/favicon.png",
+  "api": {
+    "mdx": {
+      "server": "https://pay-x-beryl.vercel.app/api/v1",
+      "auth": {
+        "method": "key",
+        "name": "x-api-key"
+      }
+    }
+  },
   "navigation": {
     "tabs": [
       {
