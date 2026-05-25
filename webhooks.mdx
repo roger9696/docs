@@ -36,7 +36,7 @@ The webhook payload is a JSON object containing the transaction details.
 
 To ensure that a webhook was actually sent by PayX, you should verify the signature. 
 
-PayX includes an `x-payx-signature` header in every request. This is a HMAC-SHA256 hash of the request body, signed with your **Webhook Secret**.
+PayX includes an `x-payx-signature` header in every request. This is an HMAC-SHA256 hash of the request body, signed with your **Webhook Secret**.
 
 ### Verifying Signatures (Node.js SDK)
 
