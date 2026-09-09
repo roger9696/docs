@@ -74,8 +74,8 @@ Disburse funds directly to a mobile money wallet (MTN, Telecel, AirtelTigo).
 
 ```bash curl
 curl -X POST https://payx.company/api/v1/payout \
-  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
-  -H "Idempotency-Key: a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+  -H "x-api-key: px_live_v2_YOUR_SECRET_KEY" \
+  -H "Idempotency-Key: sample-unique-idempotency-key-12345" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 250.00,
@@ -87,14 +87,14 @@ curl -X POST https://payx.company/api/v1/payout \
 
 ```javascript Node.js
 const { PayX } = require('payx-node');
-const payx = new PayX({ apiKey: 'px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8' });
+const payx = new PayX({ apiKey: process.env.PAYX_SECRET_KEY });
 
 const res = await payx.payouts.create({
   amount: 250.00,
   currency: 'GHS',
   phoneNumber: '0241234567',
   network: 'MTN',
-  idempotencyKey: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  idempotencyKey: 'sample-unique-idempotency-key-12345',
   payeeNote: 'Supplier Payment'
 });
 

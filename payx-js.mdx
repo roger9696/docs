@@ -21,7 +21,7 @@ sequenceDiagram
     participant PayXSDK as PayX Modal (payx.js)
 
     Customer->>MerchantServer: Click "Pay Now"
-    MerchantServer->>PayXAPI: POST /api/v1/checkout (with px_live_v2_...)
+    MerchantServer->>PayXAPI: POST /api/v1/checkout (with secret key)
     PayXAPI-->>MerchantServer: Return checkoutToken (px_checkout_...)
     MerchantServer-->>Customer: Return checkoutToken
     Customer->>PayXSDK: PayX.checkout({ token: "px_checkout_..." })

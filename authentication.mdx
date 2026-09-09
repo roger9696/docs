@@ -16,8 +16,8 @@ Every account has two sets of keys:
 
 | Key Type | Prefix Format | Example |
 | :--- | :--- | :--- |
-| **Live Secret Key** | `px_live_v2_` | `px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8` |
-| **Test Secret Key** | `px_test_v2_` | `px_test_v2_6ba7b811-9dad-11d1-80b4-00c04fd430c8` |
+| **Live Secret Key** | `px_live_v2_` | `px_live_v2_YOUR_LIVE_KEY_HERE` |
+| **Test Secret Key** | `px_test_v2_` | `px_test_v2_YOUR_TEST_KEY_HERE` |
 
 <Warning>
   **Never expose Secret Keys in client-side code.**
@@ -34,7 +34,7 @@ All API requests must be made over HTTPS. To authenticate, include your Secret K
 
 ```bash
 curl -X POST https://payx.company/api/v1/charge \
-  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
+  -H "x-api-key: px_live_v2_YOUR_SECRET_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 10.00,
@@ -47,7 +47,7 @@ curl -X POST https://payx.company/api/v1/charge \
 
 ```bash
 curl -X POST https://payx.company/api/v1/charge \
-  -H "Authorization: Bearer px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
+  -H "Authorization: Bearer px_live_v2_YOUR_SECRET_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 10.00,

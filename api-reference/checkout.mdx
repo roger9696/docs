@@ -51,7 +51,7 @@ This endpoint requires your v2 secret API key:
 
 ```bash curl
 curl -X POST https://payx.company/api/v1/checkout \
-  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
+  -H "x-api-key: px_live_v2_YOUR_SECRET_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 100.00,
@@ -65,7 +65,7 @@ curl -X POST https://payx.company/api/v1/checkout \
 
 ```javascript Node.js
 const { PayX } = require('payx-node');
-const payx = new PayX({ apiKey: 'px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8' });
+const payx = new PayX({ apiKey: process.env.PAYX_SECRET_KEY });
 
 const session = await payx.checkout.create({
   amount: 100.00,
@@ -85,8 +85,8 @@ console.log('Checkout Token:', session.checkoutToken);
 
 ```json 201 Created
 {
-  "checkoutToken": "px_checkout_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "url": "https://payx.company/checkout?key=px_checkout_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "checkoutToken": "px_checkout_sample_scoped_token_12345",
+  "url": "https://payx.company/checkout?key=px_checkout_sample_scoped_token_12345",
   "expiresAt": "2026-09-09T22:35:00.000Z"
 }
 ```

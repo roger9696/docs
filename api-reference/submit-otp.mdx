@@ -41,20 +41,20 @@ This endpoint requires your v2 secret API key:
 
 ```bash curl
 curl -X POST https://payx.company/api/v1/submit-otp \
-  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
+  -H "x-api-key: px_live_v2_YOUR_SECRET_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "transactionId": "550e8400-e29b-41d4-a716-446655440000",
+    "transactionId": "sample_tx_12345678",
     "otp": "123456"
   }'
 ```
 
 ```javascript Node.js
 const { PayX } = require('payx-node');
-const payx = new PayX({ apiKey: 'px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8' });
+const payx = new PayX({ apiKey: process.env.PAYX_SECRET_KEY });
 
 const res = await payx.charge.submitOtp({
-  transactionId: '550e8400-e29b-41d4-a716-446655440000',
+  transactionId: 'sample_tx_12345678',
   otp: '123456'
 });
 
@@ -68,7 +68,7 @@ console.log('Result:', res.status);
 ```json 200 OK
 {
   "message": "OTP verified successfully",
-  "transactionId": "550e8400-e29b-41d4-a716-446655440000",
+  "transactionId": "sample_tx_12345678",
   "status": "SUCCESSFUL"
 }
 ```

@@ -53,7 +53,7 @@ This endpoint requires your v2 secret API key:
 
 ```bash curl
 curl -X POST https://payx.company/api/v1/charge \
-  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
+  -H "x-api-key: px_live_v2_YOUR_SECRET_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 10.00,
@@ -65,7 +65,7 @@ curl -X POST https://payx.company/api/v1/charge \
 
 ```javascript Node.js
 const { PayX } = require('payx-node');
-const payx = new PayX({ apiKey: 'px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8' });
+const payx = new PayX({ apiKey: process.env.PAYX_SECRET_KEY });
 
 const res = await payx.charge.create({
   amount: 10.00,
@@ -84,7 +84,7 @@ console.log('Transaction ID:', res.transactionId);
 ```json 202 Accepted
 {
   "message": "Transaction initiated",
-  "transactionId": "550e8400-e29b-41d4-a716-446655440000",
+  "transactionId": "sample_transaction_id_550e8400",
   "status": "PENDING"
 }
 ```
