@@ -41,7 +41,14 @@
         "groups": [
           {
             "group": "API Reference",
-            "pages": ["api-reference/charge", "api-reference/payout"]
+            "pages": [
+              "api-reference/checkout",
+              "api-reference/charge",
+              "api-reference/status",
+              "api-reference/submit-otp",
+              "api-reference/payout",
+              "api-reference/webhooks"
+            ]
           }
         ]
       }

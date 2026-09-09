@@ -7,7 +7,7 @@ In this guide, we'll walk through how to initiate your first Mobile Money charge
 
 ### 1. Get your API Keys
 
-Log in to your [PayX Dashboard](https://payx.company/dashboard) and navigate to the **Developer Settings** tab. Copy your `Test Secret Key`.
+Log in to your [PayX Dashboard](https://payx.company/dashboard) and navigate to the **Developer Settings** tab. Copy your `Test Secret Key` (`px_test_v2_...`).
 
 ### 2. Install the SDK
 
@@ -19,13 +19,13 @@ npm install payx-node@latest
 
 ### 3. Initialize the Client
 
-Create a new file and initialize the PayX client with your API key.
+Create a new file and initialize the PayX client with your v2 API key.
 
 ```javascript
 const { PayX } = require('payx-node');
 
 const payx = new PayX({
-  apiKey: 'your_test_secret_key_here'
+  apiKey: 'px_test_v2_6ba7b811-9dad-11d1-80b4-00c04fd430c8'
 });
 ```
 
@@ -37,7 +37,7 @@ Use the `charge.create` method to request a payment from a customer.
 async function startPayment() {
   try {
     const response = await payx.charge.create({
-      amount: 10.0,
+      amount: 10.00,
       currency: 'GHS',
       phoneNumber: '0551234987',
       network: 'MTN',
@@ -67,7 +67,7 @@ You should set up a [Webhook](/webhooks) to receive real-time updates when the p
   <Card title="API Reference" icon="book" href="/api-reference/charge">
     Explore all available endpoints and parameters.
   </Card>
-  <Card title="Webhooks" icon="webhook" href="/webhooks">
-    Learn how to receive real-time notifications.
+  <Card title="PayX JS Checkout" icon="credit-card" href="/payx-js">
+    Integrate our secure inline modal checkout.
   </Card>
 </CardGroup>

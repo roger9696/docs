@@ -4,10 +4,15 @@ api: "POST /charge"
 description: "Initiate a Mobile Money collection"
 ---
 
+### Authentication
+
+This endpoint requires your v2 secret API key:
+- Header: `x-api-key: px_live_v2_...` or `Authorization: Bearer px_live_v2_...`
+
 ### Body Parameters
 
 <ParamField body="amount" type="number" required>
-  The amount to collect in GHS.
+  The amount to collect in GHS. Must be a positive number with at most 2 decimal places (e.g. `10.00`).
 </ParamField>
 
 <ParamField body="phoneNumber" type="string" required>
@@ -23,7 +28,7 @@ description: "Initiate a Mobile Money collection"
 </ParamField>
 
 <ParamField body="payerMessage" type="string">
-  A message displayed to the customer on their phone.
+  A message displayed to the customer on their phone prompt.
 </ParamField>
 
 <ParamField body="payeeNote" type="string">
@@ -48,24 +53,28 @@ description: "Initiate a Mobile Money collection"
 
 ```bash curl
 curl -X POST https://payx.company/api/v1/charge \
-  -H "x-api-key: sk_test_..." \
+  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
   -H "Content-Type: application/json" \
   -d '{
-    "amount": 1.0,
+    "amount": 10.00,
     "phoneNumber": "0551234987",
-    "network": "MTN"
+    "network": "MTN",
+    "payerMessage": "Order #1001"
   }'
 ```
 
 ```javascript Node.js
 const { PayX } = require('payx-node');
-const payx = new PayX({ apiKey: 'sk_test_...' });
+const payx = new PayX({ apiKey: 'px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8' });
 
 const res = await payx.charge.create({
-  amount: 1.0,
+  amount: 10.00,
   phoneNumber: '0551234987',
-  network: 'MTN'
+  network: 'MTN',
+  payerMessage: 'Order #1001'
 });
+
+console.log('Transaction ID:', res.transactionId);
 ```
 
 </RequestExample>

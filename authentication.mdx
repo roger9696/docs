@@ -3,34 +3,55 @@ title: Authentication
 description: Secure your requests to the PayX API
 ---
 
-PayX uses API Keys to authenticate requests. You can view and manage your API keys in the [PayX Dashboard](https://payx.company/dashboard).
+PayX uses API keys to authenticate server-side requests. You can view and manage your API keys in the [PayX Dashboard](https://payx.company/dashboard).
 
-## API Keys
+## API Keys (v2)
+
+PayX uses version 2 (v2) API keys for all merchant integrations. Legacy keys (`px_live_...` or `px_test_...` without `_v2_`) are rejected.
 
 Every account has two sets of keys:
 
-1.  **Test Keys:** Use these for development and testing. No real money will be moved.
-2.  **Live Keys:** Use these for production. Real money will be moved.
+1. **Test Keys (`px_test_v2_<uuid>`):** Use these in sandbox and development environments. No real funds are moved.
+2. **Live Keys (`px_live_v2_<uuid>`):** Use these in production environments. Real money will be moved.
 
-| Key Type | Header Name | Example |
+| Key Type | Prefix Format | Example |
 | :--- | :--- | :--- |
-| **Secret Key** | `x-api-key` | `sk_test_...` or `sk_live_...` |
+| **Live Secret Key** | `px_live_v2_` | `px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8` |
+| **Test Secret Key** | `px_test_v2_` | `px_test_v2_6ba7b811-9dad-11d1-80b4-00c04fd430c8` |
+
+<Warning>
+  **Never expose Secret Keys in client-side code.**
+  Secret API keys (`px_live_v2_...` / `px_test_v2_...`) must never be embedded in browser JavaScript, mobile applications, or public code repositories.
+
+  To accept payments securely in the browser, your backend must call `POST /api/v1/checkout` to generate a 30-minute scoped token (`px_checkout_...`). See [PayX JS Checkout](/payx-js) for details.
+</Warning>
 
 ## Authenticating Requests
 
-All API requests must be made over HTTPS. To authenticate, include your Secret Key in the `x-api-key` header of your request.
+All API requests must be made over HTTPS. To authenticate, include your Secret Key in the `x-api-key` header or the standard `Authorization: Bearer` header.
+
+### Option 1: `x-api-key` Header (Recommended)
 
 ```bash
 curl -X POST https://payx.company/api/v1/charge \
-  -H "x-api-key: your_secret_key" \
+  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
   -H "Content-Type: application/json" \
   -d '{
-    "amount": 10.0,
+    "amount": 10.00,
     "phoneNumber": "0551234987",
     "network": "MTN"
   }'
 ```
 
-<Warning>
-  **Keep your Secret Keys private.** Do not share them in client-side code (browsers, mobile apps) or public repositories like GitHub.
-</Warning>
+### Option 2: `Authorization: Bearer` Header
+
+```bash
+curl -X POST https://payx.company/api/v1/charge \
+  -H "Authorization: Bearer px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 10.00,
+    "phoneNumber": "0551234987",
+    "network": "MTN"
+  }'
+```

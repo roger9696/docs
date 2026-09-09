@@ -1,0 +1,59 @@
+---
+title: "Webhooks Reference"
+description: "Listen for asynchronous payment and payout notifications"
+---
+
+PayX sends webhook events over HTTPS to your server whenever transaction states change.
+
+<Tip>
+  For detailed setup instructions, SSRF security rules, and code samples, check out the [Webhooks Integration Guide](/webhooks).
+</Tip>
+
+### Webhook Request Headers
+
+| Header | Description |
+| :--- | :--- |
+| `X-PayX-Signature` | HMAC-SHA256 signature generated with your webhook secret (`whsec_live_...` or `whsec_test_...`). |
+| `Content-Type` | `application/json` |
+
+---
+
+### Delivery Rules
+
+- Webhooks are delivered via `POST` requests to your configured public HTTPS endpoint on port 443.
+- Private network addresses and localhost are blocked to prevent SSRF vulnerabilities.
+- Your server should return a `200 OK` response status to acknowledge receipt.
+
+---
+
+### Event Types
+
+- `transaction.success`: Triggered when a collection or payout is successfully completed.
+- `transaction.failed`: Triggered when a transaction fails or is rejected.
+
+---
+
+### Example Payload (`transaction.success`)
+
+```json
+{
+  "event": "transaction.success",
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "reference": "ORD-2026-9810",
+    "amount": 100.00,
+    "currency": "GHS",
+    "status": "SUCCESSFUL",
+    "type": "CHARGE",
+    "customer": {
+      "phoneNumber": "0551234987",
+      "network": "MTN",
+      "email": "customer@example.com"
+    },
+    "createdAt": "2026-09-09T22:15:30.000Z",
+    "metadata": {
+      "orderId": "ORD-2026-9810"
+    }
+  }
+}
+```

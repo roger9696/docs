@@ -1,0 +1,94 @@
+---
+title: "Create Checkout Session"
+api: "POST /checkout"
+description: "Generate a 30-minute scoped token for client-side checkout"
+---
+
+Creates a new checkout session and returns a scoped token (`px_checkout_...`) valid for 30 minutes. Pass this scoped token to your frontend to initialize [`PayX.checkout()`](/payx-js) securely without exposing your secret API keys.
+
+### Authentication
+
+This endpoint requires your v2 secret API key:
+- Header: `x-api-key: px_live_v2_...` or `Authorization: Bearer px_live_v2_...`
+
+### Body Parameters
+
+<ParamField body="amount" type="number" required>
+  The amount to collect in GHS. Must be a positive number with at most 2 decimal places (e.g. `100.00`).
+</ParamField>
+
+<ParamField body="currency" type="string" required default="GHS">
+  The 3-letter ISO currency code. Currently only `GHS` is supported.
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  The customer's email address.
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Optional key-value object to store custom application metadata associated with the transaction.
+</ParamField>
+
+---
+
+### Response
+
+<ResponseField name="checkoutToken" type="string">
+  The 30-minute scoped token (starts with `px_checkout_`) to pass to the frontend `PayX.checkout({ token })` modal.
+</ResponseField>
+
+<ResponseField name="url" type="string">
+  The hosted checkout page URL (`https://payx.company/checkout?key=...`).
+</ResponseField>
+
+<ResponseField name="expiresAt" type="string">
+  ISO 8601 timestamp indicating when the checkout token will expire.
+</ResponseField>
+
+---
+
+<RequestExample>
+
+```bash curl
+curl -X POST https://payx.company/api/v1/checkout \
+  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 100.00,
+    "currency": "GHS",
+    "email": "customer@example.com",
+    "metadata": {
+      "orderId": "ORD-5541"
+    }
+  }'
+```
+
+```javascript Node.js
+const { PayX } = require('payx-node');
+const payx = new PayX({ apiKey: 'px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8' });
+
+const session = await payx.checkout.create({
+  amount: 100.00,
+  currency: 'GHS',
+  email: 'customer@example.com',
+  metadata: {
+    orderId: 'ORD-5541'
+  }
+});
+
+console.log('Checkout Token:', session.checkoutToken);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201 Created
+{
+  "checkoutToken": "px_checkout_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "url": "https://payx.company/checkout?key=px_checkout_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresAt": "2026-09-09T22:35:00.000Z"
+}
+```
+
+</ResponseExample>

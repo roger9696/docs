@@ -4,18 +4,32 @@ api: "POST /payout"
 description: "Send money to a mobile wallet"
 ---
 
+Disburse funds directly to a mobile money wallet (MTN, Telecel, AirtelTigo).
+
+### Headers
+
+<ParamField header="Idempotency-Key" type="string" required>
+  A unique identifier (16–128 characters consisting of letters, numbers, hyphens, or underscores) to prevent duplicate transactions if a network timeout or retry occurs.
+</ParamField>
+
+<ParamField header="x-api-key" type="string" required>
+  Your Secret API Key (`px_live_v2_...` or `px_test_v2_...`). Alternatively, you can use the `Authorization: Bearer <key>` header.
+</ParamField>
+
+---
+
 ### Body Parameters
 
 <ParamField body="amount" type="number" required>
-  The amount to send in GHS.
+  The amount to send in GHS. Must be a positive number with at most 2 decimal places (e.g. `250.00`).
 </ParamField>
 
 <ParamField body="phoneNumber" type="string" required>
-  The recipient's 10-digit mobile money number.
+  The recipient's 10-digit mobile money number (e.g., `0241234567`).
 </ParamField>
 
 <ParamField body="network" type="string" required>
-  The network provider. Options: `MTN`, `TELECEL`, `AIRTELTIGO`.
+  The network provider. Supported values: `MTN`, `TELECEL`, `AIRTELTIGO`.
 </ParamField>
 
 <ParamField body="currency" type="string" default="GHS">
@@ -38,6 +52,8 @@ description: "Send money to a mobile wallet"
   Custom JSON data to associate with the payout.
 </ParamField>
 
+---
+
 ### Response
 
 <ResponseField name="message" type="string">
@@ -45,22 +61,25 @@ description: "Send money to a mobile wallet"
 </ResponseField>
 
 <ResponseField name="transactionId" type="string">
-  The unique ID for this transaction.
+  The unique transaction identifier for status checks and reconciliation.
 </ResponseField>
 
 <ResponseField name="status" type="string">
-  The current status.
+  The initial status of the payout (e.g., `PENDING` or `PROCESSING`).
 </ResponseField>
+
+---
 
 <RequestExample>
 
 ```bash curl
 curl -X POST https://payx.company/api/v1/payout \
-  -H "x-api-key: sk_test_..." \
+  -H "x-api-key: px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8" \
+  -H "Idempotency-Key: a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
   -H "Content-Type: application/json" \
   -d '{
-    "amount": 50.0,
-    "phoneNumber": "0551234987",
+    "amount": 250.00,
+    "phoneNumber": "0241234567",
     "network": "MTN",
     "payeeNote": "Supplier Payment"
   }'
@@ -68,14 +87,18 @@ curl -X POST https://payx.company/api/v1/payout \
 
 ```javascript Node.js
 const { PayX } = require('payx-node');
-const payx = new PayX({ apiKey: 'sk_test_...' });
+const payx = new PayX({ apiKey: 'px_live_v2_6ba7b810-9dad-11d1-80b4-00c04fd430c8' });
 
-const res = await payx.payout.create({
-  amount: 50.0,
-  phoneNumber: '0551234987',
+const res = await payx.payouts.create({
+  amount: 250.00,
+  currency: 'GHS',
+  phoneNumber: '0241234567',
   network: 'MTN',
+  idempotencyKey: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
   payeeNote: 'Supplier Payment'
 });
+
+console.log('Payout ID:', res.transactionId);
 ```
 
 </RequestExample>

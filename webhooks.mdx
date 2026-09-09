@@ -3,66 +3,142 @@ title: Webhooks
 description: Receive real-time notifications about your transactions
 ---
 
-Webhooks allow you to receive real-time notifications when the status of a transaction changes (e.g., when a user approves a payment prompt).
+Webhooks allow your application to receive real-time HTTP push notifications when the status of a transaction changes (for example, when a mobile money collection is approved or failed).
 
 ## Configuring Webhooks
 
 You can configure your Webhook URL in the [PayX Dashboard](https://payx.company/dashboard) under **Developer Settings**.
 
-Once configured, PayX will send a `POST` request to your URL whenever a transaction is completed or failed.
+Once configured, PayX will send an HTTPS `POST` request with JSON payloads to your endpoint whenever transaction events occur.
 
-## Payload Structure
+---
 
-The webhook payload is a JSON object containing the transaction details.
+## Security & Delivery Rules
 
-```json
-{
-  "event": "transaction.success",
-  "data": {
-    "id": "550e8400-e29b-41d4-a716-446655440000",
-    "amount": 10.0,
-    "currency": "GHS",
-    "status": "SUCCESSFUL",
-    "reference": "your_custom_reference",
-    "customer": {
-      "phone": "0551234987",
-      "network": "MTN"
-    }
-  }
-}
-```
+To protect merchant systems and prevent security vulnerabilities, PayX enforces strict outbound webhook rules:
 
-## Security
+<Warning>
+  **HTTPS & SSRF Protection:**
+  - Webhook destinations **must** use public HTTPS endpoints on port 443 (e.g., `https://api.yourdomain.com/webhooks`).
+  - Destinations targeting `localhost`, loopback addresses (`127.0.0.1`, `::1`), private IP ranges (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`), or non-443 ports are blocked to prevent Server-Side Request Forgery (SSRF).
+  - For local testing, use a tunneling tool such as [ngrok](https://ngrok.com) or [Cloudflare Tunnels](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) to expose a public HTTPS URL.
+</Warning>
 
-To ensure that a webhook was actually sent by PayX, you should verify the signature. 
+---
 
-PayX includes an `x-payx-signature` header in every request. This is an HMAC-SHA256 hash of the request body, signed with your **Webhook Secret**.
+## Signature Verification
 
-### Verifying Signatures (Node.js SDK)
+Every webhook request contains an `X-PayX-Signature` header. This is an HMAC-SHA256 signature generated using your Webhook Secret (`whsec_live_...` or `whsec_test_...`) and the raw HTTP request body.
 
-If you are using the `payx-node` SDK, verifying signatures is straightforward:
+You should always verify this signature before processing events.
+
+### Verifying with Node.js SDK
+
+If you are using the `payx-node` SDK:
 
 ```javascript
+const express = require('express');
 const { PayX } = require('payx-node');
-const payx = new PayX({ apiKey: '...' });
 
-// Express.js Example
+const app = express();
+app.use(express.json());
+
+const payx = new PayX({ apiKey: process.env.PAYX_SECRET_KEY });
+
 app.post('/webhooks', (req, res) => {
   const signature = req.headers['x-payx-signature'];
-  const secret = 'your_webhook_secret_from_dashboard';
+  const webhookSecret = process.env.PAYX_WEBHOOK_SECRET; // starts with whsec_live_... or whsec_test_...
   
   const isValid = payx.webhooks.verifySignature(
-    JSON.stringify(req.body), 
+    req.body, 
     signature, 
-    secret
+    webhookSecret
   );
 
   if (!isValid) {
     return res.status(401).send('Invalid Signature');
   }
 
-  // Process the event...
-  console.log('Event received:', req.body.event);
+  const { event, data } = req.body;
+  console.log(`Received event: ${event}`, data);
+
+  // Acknowledge receipt promptly
   res.status(200).send('OK');
 });
+
+app.listen(3000, () => console.log('Webhook server running on port 3000'));
+```
+
+### Manual Verification (Standard Node.js Crypto)
+
+```javascript
+const crypto = require('crypto');
+
+function verifyPayXSignature(rawBody, signatureHeader, secret) {
+  const computedSignature = crypto
+    .createHmac('sha256', secret)
+    .update(typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody))
+    .digest('hex');
+
+  return crypto.timingSafeEqual(
+    Buffer.from(computedSignature, 'utf8'),
+    Buffer.from(signatureHeader, 'utf8')
+  );
+}
+```
+
+---
+
+## Event Payloads
+
+### 1. `transaction.success`
+
+Sent when a payment or payout has successfully completed.
+
+```json
+{
+  "event": "transaction.success",
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "reference": "ORD-2026-9810",
+    "amount": 100.00,
+    "currency": "GHS",
+    "status": "SUCCESSFUL",
+    "type": "CHARGE",
+    "customer": {
+      "phoneNumber": "0551234987",
+      "network": "MTN",
+      "email": "customer@example.com"
+    },
+    "createdAt": "2026-09-09T22:15:30.000Z",
+    "metadata": {
+      "orderId": "ORD-2026-9810"
+    }
+  }
+}
+```
+
+### 2. `transaction.failed`
+
+Sent when a transaction fails (e.g., customer cancelled USSD prompt, insufficient wallet balance, or network timeout).
+
+```json
+{
+  "event": "transaction.failed",
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "reference": "ORD-2026-9810",
+    "amount": 100.00,
+    "currency": "GHS",
+    "status": "FAILED",
+    "type": "CHARGE",
+    "failureReason": "INSUFFICIENT_FUNDS",
+    "customer": {
+      "phoneNumber": "0551234987",
+      "network": "MTN",
+      "email": "customer@example.com"
+    },
+    "createdAt": "2026-09-09T22:15:30.000Z"
+  }
+}
 ```
